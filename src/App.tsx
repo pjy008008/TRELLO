@@ -40,6 +40,8 @@ body {
   font-weight: 300;
   font-family: 'Source Sans Pro', sans-serif;
   line-height: 1.2;
+  background-color:${(props) => props.theme.bgColor};
+  color:black;
 }
 menu, ol, ul {
   list-style: none;
