@@ -3,6 +3,7 @@ import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import { toDoState } from "../atoms";
 import Board from "../components/Board";
+import { useForm } from "react-hook-form";
 
 const Wrapper = styled.div`
   display: flex;
@@ -19,14 +20,13 @@ const Boards = styled.div`
   gap: 10px;
   grid-template-columns: repeat(3, 1fr);
 `;
-
-const Card = styled.div`
-  background-color: ${(props) => props.theme.cardColor};
-  padding: 10px 10px;
-  margin-bottom: 5px;
-  border-radius: 5px;
+const Form = styled.form`
+  input {
+    position: absolute;
+    right: 3vw;
+    top: 3vh;
+  }
 `;
-const toDos = ["a", "b", "c", "d", "e", "f"];
 
 const Dnd = () => {
   const onDragEnd = (info: DropResult) => {
@@ -60,10 +60,29 @@ const Dnd = () => {
     }
   };
   const [toDos, setToDos] = useRecoilState(toDoState);
+  const { register, setValue, handleSubmit } = useForm<IBoardInput>();
+  interface IBoardInput {
+    board: string;
+  }
+  const onValid = ({ board }: IBoardInput) => {
+    setToDos((allBoards) => {
+      return {
+        ...allBoards,
+        [board]: [],
+      };
+    });
+    setValue("board", "");
+  };
   return (
     <>
       <DragDropContext onDragEnd={onDragEnd}>
         <Wrapper>
+          <Form onSubmit={handleSubmit(onValid)}>
+            <input
+              {...register("board", { required: true })}
+              placeholder="Type new board name"
+            />
+          </Form>
           <Boards>
             {Object.keys(toDos).map((boardId) => (
               <Board boardId={boardId} key={boardId} toDos={toDos[boardId]} />

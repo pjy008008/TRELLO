@@ -21,6 +21,7 @@ const Title = styled.h2`
   font-weight: 600;
   margin-bottom: 10px;
   font-size: 18px;
+  color: ${(props) => props.theme.textColor};
 `;
 interface IAreaProps {
   isDraggingFromThis: boolean;
@@ -29,7 +30,7 @@ interface IAreaProps {
 const Area = styled.div<IAreaProps>`
   background-color: ${(props) =>
     props.isDraggingOver
-      ? "#dfe6e9"
+      ? "#d2dae2"
       : props.isDraggingFromThis
       ? "#b2bec3"
       : "transparent"};
@@ -41,6 +42,14 @@ const Form = styled.form`
   width: 100%;
   input {
     width: 100%;
+    background-color: #808e9b;
+    height: 30px;
+    border: none;
+    text-align: center;
+    &::placeholder {
+      color: ${(props) => props.theme.textColor};
+      text-align: center;
+    }
   }
 `;
 interface IBoardProps {
