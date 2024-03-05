@@ -76,9 +76,32 @@ const Board = ({ toDos, boardId }: IBoardProps) => {
     });
     setValue("toDo", "");
   };
+  const onDelete = (boardName: string) => {
+    setToDos((allBoards: IToDoState) => {
+      if (allBoards.hasOwnProperty(boardName)) {
+        const updatedBoards = { ...allBoards };
+        delete updatedBoards[boardName];
+        return updatedBoards;
+      }
+      return {
+        ...allBoards,
+      };
+    });
+  };
   return (
     <Wrapper>
-      <Title>{boardId}</Title>
+      <Title>
+        <span style={{ display: "inline-block", paddingLeft: "40px" }}>
+          {boardId}
+        </span>
+        <span
+          style={{ float: "right", paddingRight: "20px" }}
+          className="material-symbols-outlined"
+          onClick={() => onDelete(boardId)}
+        >
+          delete
+        </span>
+      </Title>
       <Form onSubmit={handleSubmit(onValid)}>
         <input
           {...register("toDo", { required: true })}
