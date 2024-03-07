@@ -1,4 +1,9 @@
-import { DragDropContext, DropResult } from "react-beautiful-dnd";
+import {
+  DragDropContext,
+  Draggable,
+  DropResult,
+  Droppable,
+} from "react-beautiful-dnd";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import { toDoState } from "../atoms";
@@ -59,6 +64,7 @@ const Dnd = () => {
       });
     }
   };
+
   const [toDos, setToDos] = useRecoilState(toDoState);
   const { register, setValue, handleSubmit } = useForm<IBoardInput>();
   interface IBoardInput {
@@ -83,11 +89,25 @@ const Dnd = () => {
               placeholder="Type new board name"
             />
           </Form>
-          <Boards>
-            {Object.keys(toDos).map((boardId) => (
-              <Board boardId={boardId} key={boardId} toDos={toDos[boardId]} />
-            ))}
-          </Boards>
+          <Droppable droppableId="boards">
+            {(magic, snapshot) => (
+              <Boards ref={magic.innerRef} {...magic.droppableProps}>
+                {Object.keys(toDos).map((boardId, index) => (
+                  <Draggable index={index} key={boardId} draggableId={boardId}>
+                    {(magic, snapshot) => (
+                      <Board
+                        {...magic.draggableProps}
+                        {...magic.dragHandleProps}
+                        boardId={boardId}
+                        key={boardId}
+                        toDos={toDos[boardId]}
+                      />
+                    )}
+                  </Draggable>
+                ))}
+              </Boards>
+            )}
+          </Droppable>
         </Wrapper>
       </DragDropContext>
     </>
