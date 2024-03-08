@@ -95,13 +95,17 @@ const Dnd = () => {
                 {Object.keys(toDos).map((boardId, index) => (
                   <Draggable index={index} key={boardId} draggableId={boardId}>
                     {(magic, snapshot) => (
-                      <Board
+                      <div
+                        ref={magic.innerRef}
                         {...magic.draggableProps}
                         {...magic.dragHandleProps}
-                        boardId={boardId}
-                        key={boardId}
-                        toDos={toDos[boardId]}
-                      />
+                      >
+                        <Board
+                          boardId={boardId}
+                          key={boardId}
+                          toDos={toDos[boardId]}
+                        />
+                      </div>
                     )}
                   </Draggable>
                 ))}
