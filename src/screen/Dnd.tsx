@@ -6,9 +6,10 @@ import {
 } from "react-beautiful-dnd";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
-import { toDoState } from "../atoms";
+import { IToDoState, toDoState } from "../atoms";
 import Board from "../components/Board";
 import { useForm } from "react-hook-form";
+import { ObjectFlags } from "typescript";
 
 const Wrapper = styled.div`
   display: flex;
@@ -37,8 +38,23 @@ const Dnd = () => {
   const onDragEnd = (info: DropResult) => {
     console.log(info);
     const { draggableId, destination, source } = info;
-    if(destination?.droppableId==="boards"){                                                                                                                
 
+    if (destination?.droppableId === "boards") {
+      setToDos((oldToDos) => {
+        const updatedToDos = { ...oldToDos };
+        const sourceKey = Object.keys(updatedToDos)[source.index];
+        const desKey = Object.keys(updatedToDos)[destination.index];
+        const tempKey = sourceKey;
+        const tempValue = updatedToDos[sourceKey];
+
+        updatedToDos[sourceKey] = updatedToDos[desKey];
+        updatedToDos[desKey] = tempValue;
+
+        delete updatedToDos[sourceKey];
+        updatedToDos[tempKey] = tempValue;
+
+        return updatedToDos;
+      });
     }
     // if (!destination) return;
     // if (destination.droppableId === source.droppableId) {
@@ -92,9 +108,10 @@ const Dnd = () => {
               placeholder="Type new board name"
             />
           </Form>
-          <Droppable droppableId="boards">
+          <Droppable direction="horizontal" droppableId="boards">
             {(magic, snapshot) => (
               <Boards ref={magic.innerRef} {...magic.droppableProps}>
+                {/* {magic.placeholder} */}
                 {Object.keys(toDos).map((boardId, index) => (
                   <Draggable index={index} key={boardId} draggableId={boardId}>
                     {(magic, snapshot) => (
