@@ -38,7 +38,7 @@ const Dnd = () => {
   const onDragEnd = (info: DropResult) => {
     console.log(info);
     const { draggableId, destination, source } = info;
-
+    if (!destination) return;
     if (destination?.droppableId === "boards") {
       setToDos((oldToDos) => {
         const updatedToDos = { ...oldToDos };
@@ -56,32 +56,31 @@ const Dnd = () => {
         return updatedToDos;
       });
     }
-    // if (!destination) return;
-    // if (destination.droppableId === source.droppableId) {
-    //   setToDos((oldToDos) => {
-    //     const boardCopy = [...oldToDos[source.droppableId]];
-    //     const taskObj = boardCopy[source.index];
-    //     boardCopy.splice(source.index, 1);
-    //     boardCopy.splice(destination?.index, 0, taskObj);
-    //     return {
-    //       ...oldToDos,
-    //       [source.droppableId]: boardCopy,
-    //     };
-    //   });
-    // } else {
-    //   setToDos((oldToDos) => {
-    //     const sourceBoard = [...oldToDos[source.droppableId]];
-    //     const taskObj = sourceBoard[source.index];
-    //     sourceBoard.splice(source.index, 1);
-    //     const desBoard = [...oldToDos[destination.droppableId]];
-    //     desBoard.splice(destination?.index, 0, taskObj);
-    //     return {
-    //       ...oldToDos,
-    //       [source.droppableId]: sourceBoard,
-    //       [destination.droppableId]: desBoard,
-    //     };
-    //   });
-    // }
+    if (destination.droppableId === source.droppableId) {
+      setToDos((oldToDos) => {
+        const boardCopy = [...oldToDos[source.droppableId]];
+        const taskObj = boardCopy[source.index];
+        boardCopy.splice(source.index, 1);
+        boardCopy.splice(destination?.index, 0, taskObj);
+        return {
+          ...oldToDos,
+          [source.droppableId]: boardCopy,
+        };
+      });
+    } else {
+      setToDos((oldToDos) => {
+        const sourceBoard = [...oldToDos[source.droppableId]];
+        const taskObj = sourceBoard[source.index];
+        sourceBoard.splice(source.index, 1);
+        const desBoard = [...oldToDos[destination.droppableId]];
+        desBoard.splice(destination?.index, 0, taskObj);
+        return {
+          ...oldToDos,
+          [source.droppableId]: sourceBoard,
+          [destination.droppableId]: desBoard,
+        };
+      });
+    }
   };
 
   const [toDos, setToDos] = useRecoilState(toDoState);
