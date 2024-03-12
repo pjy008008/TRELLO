@@ -10,6 +10,7 @@ import { IToDoState, toDoState } from "../atoms";
 import Board from "../components/Board";
 import { useForm } from "react-hook-form";
 import { ObjectFlags } from "typescript";
+import React from "react";
 
 const Wrapper = styled.div`
   display: flex;
@@ -133,4 +134,4 @@ const Dnd = () => {
     </>
   );
 };
-export default Dnd;
+export default React.memo(Dnd);
