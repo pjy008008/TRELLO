@@ -63,32 +63,31 @@ const Dnd = () => {
 
         return updatedObj;
       });
+    } else if (destination.droppableId === source.droppableId) {
+      setToDos((oldToDos) => {
+        const boardCopy = [...oldToDos[source.droppableId]];
+        const taskObj = boardCopy[source.index];
+        boardCopy.splice(source.index, 1);
+        boardCopy.splice(destination?.index, 0, taskObj);
+        return {
+          ...oldToDos,
+          [source.droppableId]: boardCopy,
+        };
+      });
+    } else {
+      setToDos((oldToDos) => {
+        const sourceBoard = [...oldToDos[source.droppableId]];
+        const taskObj = sourceBoard[source.index];
+        sourceBoard.splice(source.index, 1);
+        const desBoard = [...oldToDos[destination.droppableId]];
+        desBoard.splice(destination?.index, 0, taskObj);
+        return {
+          ...oldToDos,
+          [source.droppableId]: sourceBoard,
+          [destination.droppableId]: desBoard,
+        };
+      });
     }
-    // if (destination.droppableId === source.droppableId) {
-    //   setToDos((oldToDos) => {
-    //     const boardCopy = [...oldToDos[source.droppableId]];
-    //     const taskObj = boardCopy[source.index];
-    //     boardCopy.splice(source.index, 1);
-    //     boardCopy.splice(destination?.index, 0, taskObj);
-    //     return {
-    //       ...oldToDos,
-    //       [source.droppableId]: boardCopy,
-    //     };
-    //   });
-    // } else {
-    //   setToDos((oldToDos) => {
-    //     const sourceBoard = [...oldToDos[source.droppableId]];
-    //     const taskObj = sourceBoard[source.index];
-    //     sourceBoard.splice(source.index, 1);
-    //     const desBoard = [...oldToDos[destination.droppableId]];
-    //     desBoard.splice(destination?.index, 0, taskObj);
-    //     return {
-    //       ...oldToDos,
-    //       [source.droppableId]: sourceBoard,
-    //       [destination.droppableId]: desBoard,
-    //     };
-    //   });
-    // }
   };
 
   const [toDos, setToDos] = useRecoilState(toDoState);
@@ -118,7 +117,6 @@ const Dnd = () => {
           <Droppable direction="horizontal" droppableId="boards">
             {(magic, snapshot) => (
               <Boards ref={magic.innerRef} {...magic.droppableProps}>
-                {/* {magic.placeholder} */}
                 {Object.keys(toDos).map((boardId, index) => (
                   <Draggable index={index} key={boardId} draggableId={boardId}>
                     {(magic, snapshot) => (
@@ -144,4 +142,4 @@ const Dnd = () => {
     </>
   );
 };
-export default React.memo(Dnd);
+export default Dnd;
