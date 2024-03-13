@@ -43,14 +43,24 @@ const Dnd = () => {
     if (destination?.droppableId === "boards") {
       setToDos((oldToDos) => {
         const keys = Object.keys(oldToDos);
-        [keys[source.index], keys[destination.index]] = [
-          keys[destination.index],
-          keys[source.index],
-        ];
+        const sourceKey = keys[source.index];
+
+        // Remove the source key from the keys array
+        keys.splice(source.index, 1);
+
+        // Insert the source key at the destination index
+        keys.splice(destination.index, 0, sourceKey);
+
+        // Create the updated object with the new key order and updated values
         const updatedObj: { [key: string]: any } = {};
         keys.forEach((key) => {
-          updatedObj[key] = oldToDos[key];
+          // Get the value associated with the key
+          const value = oldToDos[key];
+
+          // Assign the value to the updated object
+          updatedObj[key] = value;
         });
+
         return updatedObj;
       });
     }
