@@ -7,7 +7,6 @@
 - TypeScript
 - react-bequtiful-dnd
 
-### Board Swap
-
-### Logic Error
-- In 1->3, 3->1 case, last of toDos are changed
+### Need To Do
+- boards should not be dropped in context
+- contexts should not be dropped in boards

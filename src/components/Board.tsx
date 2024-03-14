@@ -1,9 +1,10 @@
-import { Droppable } from "react-beautiful-dnd";
+import { DraggableProvided, Droppable } from "react-beautiful-dnd";
 import DragabbleCard from "./DragabbleCard";
 import styled from "styled-components";
 import { set, useForm } from "react-hook-form";
 import { IToDo, IToDoState, toDoState } from "../atoms";
 import { useRecoilState } from "recoil";
+import React from "react";
 
 const Wrapper = styled.div`
   width: 300px;
@@ -55,12 +56,13 @@ const Form = styled.form`
 interface IBoardProps {
   toDos: IToDo[];
   boardId: string;
+  parentProvided: DraggableProvided;
 }
 
 interface IForm {
   toDo: string;
 }
-const Board = ({ toDos, boardId }: IBoardProps) => {
+const Board = ({ toDos, boardId, parentProvided }: IBoardProps) => {
   const { register, setValue, handleSubmit } = useForm<IForm>();
   const [, setToDos] = useRecoilState<IToDoState>(toDoState);
   const onValid = ({ toDo }: IForm) => {
@@ -133,4 +135,4 @@ const Board = ({ toDos, boardId }: IBoardProps) => {
   );
 };
 
-export default Board;
+export default React.memo(Board);

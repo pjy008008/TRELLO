@@ -129,6 +129,7 @@ const Dnd = () => {
                           boardId={boardId}
                           key={boardId}
                           toDos={toDos[boardId]}
+                          parentProvided={magic}
                         />
                       </div>
                     )}
