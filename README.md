@@ -9,4 +9,5 @@
 
 ### Need To Do
 - boards should not be dropped in context
+    - use droppableid?
 - contexts should not be dropped in boards
